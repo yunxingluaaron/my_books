@@ -1,0 +1,401 @@
+{
+  "binary-tree-preorder-traversal": {
+    "core": "递归按根-左-右访问；迭代时弹出即记录，并先压右子树再压左子树。",
+    "invariant": "每次处理栈顶时，它都是尚未输出节点中按前序顺序最靠前的节点。",
+    "complexity": "时间 O(n)，递归栈或显式栈最坏 O(n)。",
+    "scope": ["二叉树", "DFS", "递归", "栈"],
+    "pitfall": "迭代压栈顺序若写成先左后右，输出会变成根-右-左。"
+  },
+  "binary-tree-postorder-traversal": {
+    "core": "递归按左-右-根访问；迭代可先得到根-右-左，再整体反转。",
+    "invariant": "反转前序列中的每个根都先于其左右子树，反转后恰为左-右-根。",
+    "complexity": "时间 O(n)，辅助空间最坏 O(n)。",
+    "scope": ["二叉树", "DFS", "后序遍历", "栈"],
+    "pitfall": "只交换左右入栈顺序而忘记最终反转，得不到后序结果。"
+  },
+  "binary-tree-inorder-traversal": {
+    "core": "指针持续向左下探并压栈；无左路可走时弹栈记录，再转向右子树。",
+    "invariant": "栈保存已访问但尚未输出的祖先，栈顶是下一个应输出的节点。",
+    "complexity": "时间 O(n)，辅助空间 O(h)，最坏 O(n)。",
+    "scope": ["二叉树", "DFS", "中序遍历", "栈"],
+    "pitfall": "循环条件必须是 cur 非空或栈非空，不能只检查其中一个。"
+  },
+  "n-ary-tree-preorder-traversal": {
+    "core": "先记录当前节点，再从左到右递归孩子；迭代栈需按孩子的逆序压入。",
+    "invariant": "节点被记录时，其所有祖先已记录，而其孩子尚未记录。",
+    "complexity": "时间 O(n)，辅助空间最坏 O(n)。",
+    "scope": ["N叉树", "DFS", "前序遍历", "栈"],
+    "pitfall": "按 children 原顺序压栈会导致兄弟节点逆序输出。"
+  },
+  "n-ary-tree-postorder-traversal": {
+    "core": "先递归处理全部孩子再记录根；迭代可构造根-逆孩子序并反转。",
+    "invariant": "一个节点输出前，它的每棵孩子子树都已完整输出。",
+    "complexity": "时间 O(n)，辅助空间最坏 O(n)。",
+    "scope": ["N叉树", "DFS", "后序遍历", "栈"],
+    "pitfall": "N 叉树孩子有固定顺序，迭代与反转时要同时校准顺序。"
+  },
+  "binary-tree-level-order-traversal": {
+    "core": "用队列做 BFS，每轮先固定当前队列长度，只处理这一层。",
+    "invariant": "一轮开始时队列中恰好按从左到右顺序保存当前层全部节点。",
+    "complexity": "时间 O(n)，空间 O(w)，w 为最大层宽。",
+    "scope": ["二叉树", "BFS", "队列", "分层遍历"],
+    "pitfall": "层内循环不能动态使用变化中的 queue.size()，应先保存 size。"
+  },
+  "binary-tree-level-order-traversal-ii": {
+    "core": "照常从上到下 BFS 收集各层，结束后反转层数组。",
+    "invariant": "BFS 阶段每层内部始终保持从左到右，最终只反转层的先后。",
+    "complexity": "时间 O(n)，空间 O(n)。",
+    "scope": ["二叉树", "BFS", "队列", "数组反转"],
+    "pitfall": "不要反转每层节点顺序；目标只要求层次自底向上。"
+  },
+  "binary-tree-right-side-view": {
+    "core": "层序遍历时只记录每层最后出队的节点值。",
+    "invariant": "同层按从左到右入队，因此索引 size-1 的节点就是该层最右可见节点。",
+    "complexity": "时间 O(n)，空间 O(w)。",
+    "scope": ["二叉树", "BFS", "层序遍历", "视图问题"],
+    "pitfall": "若改成先右后左入队，应记录每层第一个节点，规则要配套。"
+  },
+  "average-of-levels-in-binary-tree": {
+    "core": "逐层 BFS 累加节点值，用该层总和除以固定层大小。",
+    "invariant": "每轮的 sum 和 size 只对应当前层，不混入下一层新入队节点。",
+    "complexity": "时间 O(n)，空间 O(w)。",
+    "scope": ["二叉树", "BFS", "分层统计", "数值精度"],
+    "pitfall": "总和应使用 double 或更宽整数，避免大节点值累加溢出。"
+  },
+  "n-ary-tree-level-order-traversal": {
+    "core": "按层弹出 N 叉树节点，并把其 children 从左到右全部入队。",
+    "invariant": "一轮开始时队列只含当前层节点，处理后队列只含下一层节点。",
+    "complexity": "时间 O(n)，空间 O(w)。",
+    "scope": ["N叉树", "BFS", "队列", "分层遍历"],
+    "pitfall": "节点的 children 可能为空，且不能假设每个节点孩子数相同。"
+  },
+  "find-largest-value-in-each-tree-row": {
+    "core": "层序遍历，每层用第一个节点初始化最大值，再扫描该层更新。",
+    "invariant": "处理当前层前 k 个节点后，max 是这 k 个节点的最大值。",
+    "complexity": "时间 O(n)，空间 O(w)。",
+    "scope": ["二叉树", "BFS", "分层统计", "最大值"],
+    "pitfall": "最大值不能初始化为 0，否则全负数层会得到错误答案。"
+  },
+  "populating-next-right-pointers-in-each-node": {
+    "core": "利用完美二叉树结构，在一层 next 链上横移，连接 left->right 与 right->next->left。",
+    "invariant": "开始构造下一层时，当前层 next 链已经完整可遍历。",
+    "complexity": "时间 O(n)，额外空间 O(1)。",
+    "scope": ["完美二叉树", "层间连接", "指针", "O(1)空间"],
+    "pitfall": "跨父节点连接前必须确认 parent.next 存在；该公式依赖完美二叉树。"
+  },
+  "populating-next-right-pointers-in-each-node-ii": {
+    "core": "沿当前层 next 链扫描，用 dummy 和 tail 串起所有非空孩子形成下一层。",
+    "invariant": "扫描到当前节点时，dummy.next 到 tail 已是下一层的正确前缀。",
+    "complexity": "时间 O(n)，额外空间 O(1)。",
+    "scope": ["一般二叉树", "层间连接", "虚拟头节点", "指针"],
+    "pitfall": "孩子可能任意缺失，不能套用完美二叉树的固定左右连接公式。"
+  },
+  "maximum-depth-of-binary-tree": {
+    "core": "后序计算高度：当前深度等于左右子树最大深度加一。",
+    "invariant": "递归返回时，返回值准确表示以当前节点为根的子树最大深度。",
+    "complexity": "时间 O(n)，递归栈 O(h)。",
+    "scope": ["二叉树", "后序遍历", "树高", "递归"],
+    "pitfall": "空树深度为 0；不要混淆节点深度与节点高度的定义。"
+  },
+  "minimum-depth-of-binary-tree": {
+    "core": "BFS 遇到第一个叶子即可返回层数；递归时单子树节点不能取缺失侧的 0。",
+    "invariant": "BFS 按深度递增访问，因此首个左右孩子都为空的节点属于最浅叶层。",
+    "complexity": "时间 O(n)，空间 O(w)。",
+    "scope": ["二叉树", "BFS", "叶子判定", "最短路径"],
+    "pitfall": "叶子必须左右孩子都为空；只空一侧的节点不是叶子。"
+  },
+  "invert-binary-tree": {
+    "core": "访问每个节点并交换左右孩子，递归或 BFS/DFS 都可。",
+    "invariant": "处理完一个节点后，它的左右入口已交换，随后分别翻转两棵子树。",
+    "complexity": "时间 O(n)，辅助空间 O(h) 或 O(w)。",
+    "scope": ["二叉树", "递归", "结构修改", "遍历"],
+    "pitfall": "交换后递归变量的含义要保持一致，避免同一子树被处理两次。"
+  },
+  "symmetric-tree": {
+    "core": "成对比较镜像位置：值相等，并递归比较外侧与内侧孩子。",
+    "invariant": "队列或递归中的每一对节点都应位于对称轴两侧的镜像位置。",
+    "complexity": "时间 O(n)，辅助空间最坏 O(n)。",
+    "scope": ["二叉树", "镜像递归", "成对遍历", "结构比较"],
+    "pitfall": "空节点必须成对判断；比较方向应为 left.left 对 right.right。"
+  },
+  "same-tree": {
+    "core": "同步遍历两棵树，逐对检查空性、节点值以及左右子树。",
+    "invariant": "每次递归参数代表两棵树中应占据同一结构位置的节点。",
+    "complexity": "时间 O(min(n,m))，辅助空间 O(min(h1,h2))。",
+    "scope": ["二叉树", "递归", "结构比较", "同步遍历"],
+    "pitfall": "只比较遍历值序列会丢失空节点结构，不能证明两树相同。"
+  },
+  "subtree-of-another-tree": {
+    "core": "遍历主树的每个节点作为候选根，并用相同树判断验证整棵结构。",
+    "invariant": "候选根匹配成功仅当从该点起的值和左右结构全部与 subRoot 相同。",
+    "complexity": "朴素时间 O(nm)，递归栈 O(h)。",
+    "scope": ["二叉树", "递归", "子树匹配", "结构比较"],
+    "pitfall": "匹配到根值相同还不够，必须继续验证完整左右结构。"
+  },
+  "maximum-depth-of-n-ary-tree": {
+    "core": "递归求所有孩子深度的最大值，再加一得到当前节点深度。",
+    "invariant": "当前节点返回前，每个孩子返回值都是其子树的正确最大深度。",
+    "complexity": "时间 O(n)，递归栈 O(h)。",
+    "scope": ["N叉树", "递归", "树高", "后序遍历"],
+    "pitfall": "叶节点 children 为空时最大孩子深度应按 0 处理。"
+  },
+  "count-complete-tree-nodes": {
+    "core": "比较最左链和最右链高度；相等则子树完美并直接算 2^h-1，否则递归两侧。",
+    "invariant": "完全树子树若左右边界高度相同，它必是满层完美二叉树。",
+    "complexity": "时间 O(log² n)，递归栈 O(log n)。",
+    "scope": ["完全二叉树", "树高", "递归", "位运算"],
+    "pitfall": "高度与公式的边/节点计数必须统一，位移还要避免整数溢出。"
+  },
+  "balanced-binary-tree": {
+    "core": "后序返回子树高度；发现任一节点高度差超过 1 就返回 -1 作为失衡哨兵。",
+    "invariant": "非 -1 返回值既表示子树平衡，也精确表示该子树高度。",
+    "complexity": "时间 O(n)，递归栈 O(h)。",
+    "scope": ["二叉树", "后序遍历", "高度", "剪枝"],
+    "pitfall": "若对每个节点另算一次高度会退化到 O(n²)。"
+  },
+  "binary-tree-paths": {
+    "core": "DFS 维护当前根到节点的路径，到叶子时序列化并收集，返回时回溯。",
+    "invariant": "进入节点后 path 恰好表示从根到当前节点的完整路径。",
+    "complexity": "时间 O(nh)（含字符串复制），递归栈与路径 O(h)。",
+    "scope": ["二叉树", "DFS", "回溯", "路径构造"],
+    "pitfall": "只在叶子收集；递归返回前必须撤销当前节点或边的路径状态。"
+  },
+  "sum-of-left-leaves": {
+    "core": "遍历父节点，若其左孩子是叶子就累加，否则继续递归。",
+    "invariant": "一个值只在它同时满足“父节点左孩子”和“自身为叶子”时计入。",
+    "complexity": "时间 O(n)，递归栈 O(h)。",
+    "scope": ["二叉树", "DFS", "叶子判定", "父子关系"],
+    "pitfall": "最左侧节点不等于左叶子，根节点即使无孩子也不算左叶子。"
+  },
+  "find-bottom-left-tree-value": {
+    "core": "按层 BFS，每层记录第一个节点；最后一层的第一个值即答案。",
+    "invariant": "同层按左到右入队，因此每轮首次出队节点是该层最左节点。",
+    "complexity": "时间 O(n)，空间 O(w)。",
+    "scope": ["二叉树", "BFS", "层序遍历", "最深层"],
+    "pitfall": "DFS 解法必须先左后右，且只在首次到达更深层时更新答案。"
+  },
+  "path-sum": {
+    "core": "沿根到叶路径递减目标值，在叶子检查剩余值是否等于节点值。",
+    "invariant": "递归参数始终表示当前路径尚需补足的和。",
+    "complexity": "时间 O(n)，递归栈 O(h)。",
+    "scope": ["二叉树", "DFS", "根到叶路径", "目标和"],
+    "pitfall": "不能在非叶节点提前以累计和相等判成功，路径必须终止于叶子。"
+  },
+  "path-sum-ii": {
+    "core": "DFS 同时维护剩余和与当前路径，叶子满足目标时复制路径到结果。",
+    "invariant": "进入节点后 path 与 remaining 分别对应同一条根到当前节点路径及其剩余和。",
+    "complexity": "遍历 O(n)，计入结果复制为 O(nh)，辅助空间 O(h)。",
+    "scope": ["二叉树", "DFS", "回溯", "路径枚举"],
+    "pitfall": "左右递归返回后都要 pop_back，否则兄弟分支会共享脏路径。"
+  },
+  "construct-binary-tree-from-inorder-and-postorder-traversal": {
+    "core": "后序末元素是根；用哈希定位其中序位置，再按左子树长度切分两个序列。",
+    "invariant": "每次递归的中序区间与后序区间包含完全相同的一组节点且长度相等。",
+    "complexity": "哈希定位后时间 O(n)，空间 O(n)。",
+    "scope": ["二叉树构造", "递归", "中序遍历", "后序遍历"],
+    "pitfall": "后序右区间必须排除末尾根节点，区间开闭规则要始终一致。"
+  },
+  "construct-binary-tree-from-preorder-and-inorder-traversal": {
+    "core": "前序首元素是根；在中序中定位根并用左子树长度划分左右区间。",
+    "invariant": "递归传入的前序与中序区间对应同一棵子树。",
+    "complexity": "哈希定位后时间 O(n)，空间 O(n)。",
+    "scope": ["二叉树构造", "递归", "前序遍历", "中序遍历"],
+    "pitfall": "前序左区间长度必须等于中序根左侧元素个数，避免错一位。"
+  },
+  "maximum-binary-tree": {
+    "core": "区间最大值作为根，最大值左、右两段递归构造左右子树。",
+    "invariant": "每个递归区间只生成该区间元素对应的唯一最大二叉树。",
+    "complexity": "朴素时间最坏 O(n²)、栈 O(n)；单调栈可降至 O(n)。",
+    "scope": ["二叉树构造", "分治", "区间最大值", "单调栈"],
+    "pitfall": "递归切片频繁复制数组会增加开销，应传半开下标区间。"
+  },
+  "merge-two-binary-trees": {
+    "core": "同步递归两棵树；两节点都存在就求和值，只有一侧存在就沿用该子树。",
+    "invariant": "返回节点代表两棵输入树在同一位置合并后的完整子树。",
+    "complexity": "时间 O(n+m)，递归栈 O(max(h1,h2))。",
+    "scope": ["二叉树", "同步递归", "结构合并", "节点复用"],
+    "pitfall": "若复用原节点会修改输入树；需要保留输入时必须新建节点。"
+  },
+  "search-in-a-binary-search-tree": {
+    "core": "利用 BST 大小关系，每次只向可能包含目标的一侧下降。",
+    "invariant": "若目标存在，它始终位于当前节点代表的搜索子树中。",
+    "complexity": "时间 O(h)，额外空间迭代为 O(1)。",
+    "scope": ["二叉搜索树", "有序性", "查找", "迭代"],
+    "pitfall": "不要像普通二叉树一样同时搜索两侧，否则丢失 BST 的效率优势。"
+  },
+  "validate-binary-search-tree": {
+    "core": "中序遍历必须严格递增；保存前一个节点值逐项比较。",
+    "invariant": "处理当前节点前，prev 是中序序列中紧邻当前值的前驱。",
+    "complexity": "时间 O(n)，递归栈 O(h)。",
+    "scope": ["二叉搜索树", "中序遍历", "有序性", "边界"],
+    "pitfall": "只比较父子关系不够；prev 应用 long 或节点指针处理极值与重复值。"
+  },
+  "minimum-absolute-difference-in-bst": {
+    "core": "BST 中序序列有序，最小差必出现在相邻元素之间。",
+    "invariant": "访问当前值时，prev 是所有已访问值中最大的，因此也是最近前驱。",
+    "complexity": "时间 O(n)，递归栈 O(h)。",
+    "scope": ["二叉搜索树", "中序遍历", "相邻差", "有序序列"],
+    "pitfall": "不要比较所有节点对；第一个中序节点没有前驱，需单独跳过。"
+  },
+  "find-mode-in-binary-search-tree": {
+    "core": "中序遍历把相同值聚成连续段，维护当前频次、最高频次和众数列表。",
+    "invariant": "访问当前节点后 count 等于其值在当前连续段中的出现次数。",
+    "complexity": "时间 O(n)，除递归栈和答案外额外 O(1)。",
+    "scope": ["二叉搜索树", "中序遍历", "频次统计", "状态机"],
+    "pitfall": "发现更高频次时必须清空旧答案；等于最高频次时才追加。"
+  },
+  "lowest-common-ancestor-of-a-binary-tree": {
+    "core": "后序递归：命中 p/q 就返回自身；左右都非空时当前节点是最近公共祖先。",
+    "invariant": "递归返回值表示该子树中已找到的 p、q 或二者的最近汇合点。",
+    "complexity": "时间 O(n)，递归栈 O(h)。",
+    "scope": ["二叉树", "后序遍历", "最近公共祖先", "递归返回值"],
+    "pitfall": "命中 p 或 q 要立即返回，因为祖先节点本身也可能是答案。"
+  },
+  "lowest-common-ancestor-of-a-binary-search-tree": {
+    "core": "利用 BST 有序性：两目标同小则向左，同大则向右，否则当前节点是分叉点。",
+    "invariant": "下降过程中 p、q 始终都位于当前节点的子树内。",
+    "complexity": "时间 O(h)，迭代额外空间 O(1)。",
+    "scope": ["二叉搜索树", "最近公共祖先", "有序性", "迭代"],
+    "pitfall": "比较时应覆盖当前节点等于 p 或 q 的情况，此时当前节点可直接返回。"
+  },
+  "insert-into-a-binary-search-tree": {
+    "core": "按值大小下降到首个空位置，将新节点接到对应父节点。",
+    "invariant": "搜索路径上的每次左右选择都保持 BST 的全局有序关系。",
+    "complexity": "时间 O(h)，迭代额外空间 O(1)。",
+    "scope": ["二叉搜索树", "插入", "递归", "指针"],
+    "pitfall": "递归写法必须把返回子树重新赋给 root.left 或 root.right。"
+  },
+  "delete-node-in-a-bst": {
+    "core": "先定位节点；双子树时用中序后继替换，随后在右子树删除该后继。",
+    "invariant": "每次递归返回的子树都已删除目标且仍满足 BST 有序性。",
+    "complexity": "时间 O(h)，递归栈 O(h)。",
+    "scope": ["二叉搜索树", "删除", "中序后继", "结构调整"],
+    "pitfall": "双子树情形不能直接丢弃任一侧，且替换后还要删除重复后继节点。"
+  },
+  "trim-a-binary-search-tree": {
+    "core": "root 小于 low 时整棵左子树可丢弃并修剪右侧；大于 high 时对称处理。",
+    "invariant": "返回子树中的所有值均在区间内，并保持原有祖先关系与 BST 性质。",
+    "complexity": "时间 O(n)，递归栈 O(h)。",
+    "scope": ["二叉搜索树", "剪枝", "区间", "递归"],
+    "pitfall": "越界根被删除后，其某个子树仍可能含合法节点，不能直接返回 null。"
+  },
+  "convert-sorted-array-to-binary-search-tree": {
+    "core": "每次选择有序区间中点为根，左右半区递归生成平衡子树。",
+    "invariant": "递归区间有序且与生成子树一一对应，中点使两侧规模尽量接近。",
+    "complexity": "时间 O(n)，递归栈 O(log n)。",
+    "scope": ["二叉搜索树", "分治", "平衡树", "有序数组"],
+    "pitfall": "统一使用半开或闭区间；混用边界会漏元素或无限递归。"
+  },
+  "convert-bst-to-greater-tree": {
+    "core": "按右-根-左逆中序遍历，用累计和更新当前节点。",
+    "invariant": "访问节点时 sum 已包含所有严格大于它的原始节点值。",
+    "complexity": "时间 O(n)，递归栈 O(h)。",
+    "scope": ["二叉搜索树", "逆中序遍历", "前缀和", "原地修改"],
+    "pitfall": "必须先累加原值再覆盖节点，并避免跨测试复用未清零的 sum。"
+  },
+  "combinations": {
+    "core": "用 startIndex 控制下一次只能选更大的数，路径长度到 k 时收集。",
+    "invariant": "path 严格递增且只包含已决定的前缀组合，不会产生排列重复。",
+    "complexity": "输出敏感，约 O(C(n,k)·k)，递归栈 O(k)。",
+    "scope": ["回溯", "组合", "剪枝", "树形搜索"],
+    "pitfall": "循环上界应剪到 n-(k-path.size())+1，否则会搜索不可能凑满的分支。"
+  },
+  "combination-sum-iii": {
+    "core": "从 1..9 中递增选择 k 个不同数字，同时维护剩余目标和。",
+    "invariant": "path 无重复且递增，元素个数与累计和始终对应当前搜索路径。",
+    "complexity": "最多枚举 C(9,k) 个组合，输出复制 O(k)。",
+    "scope": ["回溯", "固定长度组合", "目标和", "剪枝"],
+    "pitfall": "既要按剩余个数剪枝，也要在和超过 n 时停止；数字不可重复使用。"
+  },
+  "letter-combinations-of-a-phone-number": {
+    "core": "每层消费一个数字，遍历其映射字母并递归到下一个位置。",
+    "invariant": "递归深度 index 等于 path 已为前 index 个数字各选一个字母。",
+    "complexity": "输出规模约 O(4^n·n)，递归栈 O(n)。",
+    "scope": ["回溯", "笛卡尔积", "字符串", "映射表"],
+    "pitfall": "空输入应返回空列表；数字 7 和 9 各映射四个字母。"
+  },
+  "combination-sum": {
+    "core": "候选排序后回溯；递归仍传 i 允许当前数重复使用，剩余和为 0 时收集。",
+    "invariant": "path 非递减，remaining 等于 target 减去 path 元素和。",
+    "complexity": "最坏指数级，递归深度可达 target/min(candidates)。",
+    "scope": ["回溯", "完全背包", "组合", "排序剪枝"],
+    "pitfall": "重复使用应传 i 而非 i+1；候选必须为正数才能按剩余和安全剪枝。"
+  },
+  "combination-sum-ii": {
+    "core": "先排序；每个下标只用一次，并跳过同一树层中相同值的后续候选。",
+    "invariant": "同一层每个数值只作为一次分支起点，不同层仍可使用不同下标的同值。",
+    "complexity": "最坏 O(2^n·n)，递归栈 O(n)。",
+    "scope": ["回溯", "去重", "排序", "目标和"],
+    "pitfall": "去重条件是 i>startIndex；若跨层也跳过相同值会漏掉合法组合。"
+  },
+  "palindrome-partitioning": {
+    "core": "从 start 枚举切割终点，只对回文前缀继续递归，到字符串末尾收集分割。",
+    "invariant": "path 中每一段都是原串连续且已验证的回文子串，并恰好覆盖前缀 [0,start)。",
+    "complexity": "预处理回文 O(n²)，枚举最坏 O(n·2^n)。",
+    "scope": ["回溯", "字符串切割", "回文", "动态规划预处理"],
+    "pitfall": "切割下标与 substring 长度易错；不要把子序列误当连续子串。"
+  },
+  "restore-ip-addresses": {
+    "core": "依次切出 4 段，每段长 1..3，验证数值范围和前导零后递归。",
+    "invariant": "已选 segments 都是合法 IP 段，并连续覆盖原串前缀。",
+    "complexity": "输入最长 12，搜索规模有常数上界；辅助空间 O(1)。",
+    "scope": ["回溯", "字符串切割", "合法性校验", "剪枝"],
+    "pitfall": "除单个 0 外不能有前导零；最终必须恰好四段并消耗全部字符。"
+  },
+  "subsets": {
+    "core": "每到一个搜索节点就记录当前 path，再从 startIndex 继续选择后续元素。",
+    "invariant": "path 表示一个唯一递增下标集合，搜索树每个节点对应一个子集。",
+    "complexity": "时间 O(n·2^n)，输出与递归空间 O(n·2^n)。",
+    "scope": ["回溯", "子集", "幂集", "树形搜索"],
+    "pitfall": "子集要收集所有中间节点，不是只在叶子或固定长度时收集。"
+  },
+  "subsets-ii": {
+    "core": "排序后枚举子集，并跳过同一层相邻的重复值。",
+    "invariant": "每个深度的循环中，同一数值只启动一个分支，path 仍可含多个不同下标的同值。",
+    "complexity": "最坏 O(n·2^n)，辅助递归栈 O(n)。",
+    "scope": ["回溯", "子集", "排序去重", "重复元素"],
+    "pitfall": "必须先排序；使用全局 set 虽可去重但掩盖树层去重逻辑且开销更大。"
+  },
+  "non-decreasing-subsequences": {
+    "core": "保持原数组顺序回溯，只追加不小于 path 末值的元素，并用层级 used 去重。",
+    "invariant": "path 始终非递减；同一递归层相同数值至多被选一次。",
+    "complexity": "最坏 O(n·2^n)，辅助空间 O(n)。",
+    "scope": ["回溯", "子序列", "层级去重", "非递减"],
+    "pitfall": "不能先排序，否则会改变子序列的原始相对顺序；结果长度至少为 2。"
+  },
+  "permutations": {
+    "core": "每层尝试所有尚未使用的下标，用 used 标记当前路径已选元素。",
+    "invariant": "path 中每个输入下标恰好使用一次，深度等于已确定的排列前缀长度。",
+    "complexity": "时间 O(n·n!)，辅助空间 O(n)。",
+    "scope": ["回溯", "排列", "used数组", "全搜索"],
+    "pitfall": "排列每层都从 0 枚举，不能使用组合题的 startIndex。"
+  },
+  "permutations-ii": {
+    "core": "排序并使用 used；同层若前一个相同值尚未使用，则跳过当前值。",
+    "invariant": "相同值在同层按固定下标顺序被选择，从而每个唯一排列只生成一次。",
+    "complexity": "最坏 O(n·n!)，辅助空间 O(n)。",
+    "scope": ["回溯", "排列", "排序去重", "used数组"],
+    "pitfall": "经典条件是 nums[i]==nums[i-1] 且 !used[i-1]；写反会改变去重层级。"
+  },
+  "reconstruct-itinerary": {
+    "core": "把机票建成按字典序取边的有向多重图，Hierholzer DFS 用尽出边后逆序加入机场。",
+    "invariant": "每张边被消费恰好一次；节点入答案时，从它出发的剩余行程已全部完成。",
+    "complexity": "排序或优先队列实现为 O(E log E)，空间 O(E)。",
+    "scope": ["图", "欧拉路径", "字典序", "多重边"],
+    "pitfall": "重复机票必须按多重边计数；后序得到的路线需要反转。"
+  },
+  "n-queens": {
+    "core": "按行放置皇后，用列、主对角线和副对角线占用状态剪枝。",
+    "invariant": "进入第 row 层时，前 row 行各有一个皇后且彼此不攻击。",
+    "complexity": "最坏约 O(n!)，状态与递归栈 O(n)。",
+    "scope": ["回溯", "棋盘", "约束满足", "对角线"],
+    "pitfall": "两类对角线可用 row-col 与 row+col 标识；回溯必须同步撤销三种占用。"
+  },
+  "sudoku-solver": {
+    "core": "选择一个空格，尝试不冲突的 1..9；失败就撤销，填满所有空格即结束。",
+    "invariant": "递归过程中所有已填单元都同时满足行、列和 3×3 宫约束。",
+    "complexity": "最坏指数级，位掩码校验空间 O(1)，递归深度至多 81。",
+    "scope": ["回溯", "约束满足", "位掩码", "棋盘"],
+    "pitfall": "找到完整解后要向上传播 true 立即停止；试填失败必须恢复为点号。"
+  }
+}
